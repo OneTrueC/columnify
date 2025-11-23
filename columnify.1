@@ -1,0 +1,70 @@
+.TH columnify 1 "November 23, 2025" "VERSION" "render text into \
+parallel vertical columns across pages"
+.SH NAME
+\fBcolumnify\fR \- utility to render text into parallel vertical columns across
+pages
+.SH SYNOPSIS
+\fBcolumnify\fR [\fB-hv\fR] [\fB-sp\fR \fISEPARATOR\fR] [\fB-o\fR
+\fIOUTPUT_FILE\fR] \fB-w\fR \fIWIDTH\fR \fB-n\fR \fINUMBER_OF_COLUMNS\fR
+\fB-l\fR \fIPAGE_LENGTH\fR [\fIINPUT_FILE\fR]
+.SH DESCRIPTION
+\fBcolumnify\fR is a utility to render monospace text into parallel vertical
+columns across multiple pages, intended for use as a step in preparing a
+document for printing.
+.LP
+if \fIINPUT_FILE\fR is not given, input is read from stdin. Same for
+\fIOUTPUT_FILE\fR
+.SH OPTIONS
+.TP
+.B -n \fINUMBER_OF_COLUMNS\fR
+set the number of vertical columns to spit the text into on
+each page.
+.TP
+.B -w \fIWIDTH\fR
+Set the width of the incoming text, if any line of incoming text is
+longer than the value given.
+.TP
+.B -l \fILENGTH\fR
+Set the length (in lines) of each page.
+.TP
+.B -o \fIOUTPUT_FILE\fR
+Send output to file instead of stdout.
+.TP
+.B -s \fISEPARATOR\fR
+Set the column separator, a string that will be placed between the
+columns on each line. (Each line would read "col1SEPcol2SEpcol3SEP...".)
+.TP
+.B -p \fISEPARATOR\fR
+Set the page separator, a string that will be placed at the end of every
+page. Note that no newlines are added, so by default the string is
+placed at the end of the last line of each page.
+.TP
+.B -v
+Show version information.
+.TP
+.B -h
+Show help.
+.SH EXIT STATUS
+.TS
+lb lb
+l l.
+Return Code	Meaning
+1	height/width/number of blocks argument too large
+2	width, length, and number blocks not defined
+3	invalid character, likely means that input is encoded differently than your selected locale
+4	a line in the input was longer than specified text width
+5	could not open output
+6	could not open input
+7	too many options given
+8	invalid character encoding in block or page separator, this should never happen
+9	invalid option
+10	an option that requires an argument did not have one given
+11	height/width/number of blocks argument was not a positive integer
+.TE
+.SH NOTES
+The "invalid character" errors result from a multibyte character
+sequence in either the arguments or input that is not valid in your
+currently selected locale. This could happen with the input if it is
+encoded differently that whatever your current locale is set to. If this
+error occurs in the options however, it either means that there is some
+problem with this program, or a very serious issue with your system.
