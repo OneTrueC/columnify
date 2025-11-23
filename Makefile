@@ -1,7 +1,7 @@
 .POSIX:
 .PHONY: clean install uninstall
 
-VERSION = 0.1
+VERSION = 0.1.1
 
 PREFIX = /usr/local
 BINDIR = ${PREFIX}/bin

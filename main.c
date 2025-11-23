@@ -28,7 +28,7 @@ main(int argc, char** argv)
 	char opt, *end, *linePtr;
 	int i, width, column, length, nCols;
 	size_t n, wn, len, temp;
-	wchar_t *text, *widePtr, *pageSep, *columnSep, *wTemp;
+	wchar_t *text, *widePtr, *pageSep, *colSep, *wTemp;
 	FILE *in, *out;
 
 	in = stdin;
@@ -37,7 +37,7 @@ main(int argc, char** argv)
 	widePtr = NULL;
 	n = wn = 0;
 	width = length = nCols = 0;
-	pageSep = columnSep = L"";
+	pageSep = colSep = L"";
 
 	setlocale(LC_ALL, "");
 
@@ -84,7 +84,7 @@ main(int argc, char** argv)
 
 			switch (opt) {
 			case 's':
-				columnSep = wTemp;
+				colSep = wTemp;
 				break;
 			case 'p':
 				pageSep = wTemp;
@@ -118,13 +118,13 @@ main(int argc, char** argv)
 			die(7, "too many options given");
 	}
 
-	text = malloc(sizeof(wchar_t) * width * length * nCols);
-	wmemset(text, L' ', width * length * nCols);
-
 	if (!(width && length && nCols)) {
 		usage();
 		die(2, "width, length, and number of columns MUST be defined");
 	}
+
+	text = malloc(sizeof(wchar_t) * width * length * nCols);
+	wmemset(text, L' ', width * length * nCols);
 
 	i = column = 0;
 
@@ -151,7 +151,7 @@ main(int argc, char** argv)
 			column++;
 
 			if (column == nCols) {
-				printPage(text, pageSep, columnSep, width, length, nCols, out);
+				printPage(text, pageSep, colSep, width, length, nCols, out);
 				wmemset(text, L' ', width * length * nCols);
 				i = column = 0;
 			} else
@@ -160,8 +160,7 @@ main(int argc, char** argv)
 	}
 
 	if (i != 0)
-		printPage(text, L"", columnSep, width, (i - column) / nCols, nCols,
-		          out);
+		printPage(text, L"", colSep, width, length, nCols, out);
 
 	if (in != stdin)
 		fclose(in);
@@ -172,8 +171,10 @@ main(int argc, char** argv)
 	free(text);
 	free(linePtr);
 	free(widePtr);
-	free(pageSep);
-	free(columnSep);
+	if (pageSep[0] != L'\0')
+		free(pageSep);
+	if (colSep[0] != L'\0')
+		free(colSep);
 
 	return 0;
 }
