@@ -36,8 +36,10 @@ columns on each line. (Each line would read "col1SEPcol2SEpcol3SEP...".)
 .TP
 .B -p \fISEPARATOR\fR
 Set the page separator, a string that will be placed at the end of every
-page. Note that no newlines are added, so by default the string is
-placed at the end of the last line of each page.
+page. Note that the separator is placed on the line immediately
+succeding the last of the page, and no newlines are automatically added
+before the start of each page, so the effect is that the page separator
+occurs on the first line of each page.
 .TP
 .B -v
 Show version information.
